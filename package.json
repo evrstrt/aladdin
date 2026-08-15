@@ -1,0 +1,17 @@
+{
+  "name": "aladdin",
+  "version": "0.1.0",
+  "description": "experiment tracking for agent-driven pipelines: immutable runs, revisable verdicts, evidence-first review",
+  "type": "module",
+  "bin": {
+    "aladdin": "./bin/aladdin.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "yaml": "^2.5.0"
+  }
+}

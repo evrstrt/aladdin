@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "run",
+  "type": "object",
+  "required": ["id", "experiment", "created", "commit", "scene", "host", "command"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^run-\\d{3,}$" },
+    "experiment": { "type": "string", "pattern": "^exp-\\d{4}$" },
+    "created": { "type": "string", "format": "date-time" },
+    "commit": { "type": "string", "minLength": 1 },
+    "dirty": { "type": "boolean" },
+    "config": {},
+    "scene": { "type": "string", "minLength": 1 },
+    "host": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "enum": ["rig", "runpod", "local"] },
+        "id": { "type": "string" }
+      }
+    },
+    "command": { "type": "string", "minLength": 1 },
+    "spawned_by": { "type": "string" },
+    "notes": { "type": "string" }
+  }
+}
