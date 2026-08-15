@@ -2,17 +2,72 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "experiment",
   "type": "object",
-  "required": ["id", "question", "status"],
+  "required": [
+    "id",
+    "question",
+    "status"
+  ],
   "properties": {
-    "id": { "type": "string", "pattern": "^exp-\\d{4}$" },
-    "question": { "type": "string", "minLength": 1 },
-    "status": { "enum": ["open", "concluded", "abandoned"] },
-    "conclusion": { "type": "string" },
-    "confidence": { "enum": ["low", "medium", "high"] },
-    "scenes": { "type": "array", "items": { "type": "string" } },
-    "holdout": { "type": "array", "items": { "type": "string" } },
-    "spawned_by": { "type": "string" }
+    "id": {
+      "type": "string",
+      "pattern": "^exp-\\d{4}$"
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "proposed",
+        "open",
+        "concluded",
+        "abandoned"
+      ]
+    },
+    "conclusion": {
+      "type": "string"
+    },
+    "confidence": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "holdout": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "spawned_by": {
+      "type": "string"
+    },
+    "priority": {
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    }
   },
-  "if": { "properties": { "status": { "const": "concluded" } } },
-  "then": { "required": ["conclusion", "scenes"] }
+  "if": {
+    "properties": {
+      "status": {
+        "const": "concluded"
+      }
+    }
+  },
+  "then": {
+    "required": [
+      "conclusion",
+      "scenes"
+    ]
+  }
 }

@@ -34,8 +34,11 @@ npm link                              # once, to get `aladdin` on PATH
 
 aladdin init                           # scaffold experiments/ in a project repo
 aladdin new seam-blending "does poisson beat feathering on splat seams?"
+aladdin propose tsdf-fusion "does tsdf beat poisson meshing?" --priority high
 aladdin run exp-0001 --scene warehouse-a --host runpod --command "python train.py"
+aladdin mark exp-0001 run-001 running       # later: succeeded / failed
 aladdin verdict exp-0001 --method seam-quality.v1
+aladdin status                        # queue, active runs, pending review
 aladdin check                          # validate everything; exit 1 on errors
 aladdin index                          # regenerate INDEX.md
 ```

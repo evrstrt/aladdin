@@ -81,6 +81,18 @@ export function check(args) {
       } catch (e) {
         errors.push(`${rel(runFile)}: ${e.message}`)
       }
+      const statusFile = path.join(runDir, 'status.json')
+      if (existsSync(statusFile)) {
+        try {
+          const s = JSON.parse(readFileSync(statusFile, 'utf8'))
+          for (const e of validate('runstatus', s)) errors.push(`${rel(statusFile)}: ${e}`)
+          if (s.state === 'running' && s.started && Date.now() - new Date(s.started) > 24 * 3600 * 1000) {
+            warnings.push(`${rel(statusFile)}: marked running for over 24h — stale? use "aladdin mark"`)
+          }
+        } catch (e) {
+          errors.push(`${rel(statusFile)}: ${e.message}`)
+        }
+      }
       const metricsFile = path.join(runDir, 'metrics.json')
       if (existsSync(metricsFile)) {
         try {

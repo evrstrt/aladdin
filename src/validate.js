@@ -10,7 +10,7 @@ const ajv = new Ajv2020.default({ allErrors: true, strictRequired: false })
 addFormats.default(ajv)
 
 const validators = {}
-for (const name of ['experiment', 'run', 'verdict', 'scoring']) {
+for (const name of ['experiment', 'run', 'verdict', 'scoring', 'runstatus']) {
   const schema = JSON.parse(readFileSync(path.join(schemaDir, `${name}.schema.json`), 'utf8'))
   validators[name] = ajv.compile(schema)
 }

@@ -1,22 +1,29 @@
 #!/usr/bin/env node
 import { init } from '../src/commands/init.js'
-import { newExperiment } from '../src/commands/new.js'
+import { newExperiment, propose } from '../src/commands/new.js'
 import { newRun } from '../src/commands/run.js'
 import { newVerdict } from '../src/commands/verdict.js'
 import { check } from '../src/commands/check.js'
 import { index } from '../src/commands/index-cmd.js'
+import { mark } from '../src/commands/mark.js'
+import { status } from '../src/commands/status.js'
 
 const [cmd, ...args] = process.argv.slice(2)
 
-const commands = { init, new: newExperiment, run: newRun, verdict: newVerdict, check, index }
+const commands = { init, new: newExperiment, propose, run: newRun, mark, verdict: newVerdict, check, index, status }
 
 const usage = `aladdin — experiment tracking for agent-driven pipelines
 
 usage:
   aladdin init [dir]                 scaffold experiments/ in a repo
   aladdin new <slug> <question...>   start a new experiment
+  aladdin propose <slug> <question...> [--priority high|medium|low]
+                                     queue a test proposal
   aladdin run <exp-id> [opts]        create an immutable run record
+  aladdin mark <exp-id> <run-id> <state>
+                                     update run lifecycle (queued|running|succeeded|failed|aborted)
   aladdin verdict <exp-id> [opts]    create an unreviewed verdict
+  aladdin status [dir]               dashboard: queue, active runs, pending review
   aladdin check [dir]                validate the whole tree
   aladdin index [dir]                regenerate INDEX.md`
 

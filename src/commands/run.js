@@ -47,6 +47,7 @@ export function newRun(args) {
     spawned_by: process.env.CLAUDE_SESSION_ID ?? undefined,
   }
   writeFileSync(path.join(dir, 'run.json'), JSON.stringify(run, null, 2) + '\n')
+  writeFileSync(path.join(dir, 'status.json'), JSON.stringify({ state: 'created' }, null, 2) + '\n')
   console.log(`created ${path.relative(process.cwd(), dir)}`)
   if (run.scene === 'FILL_ME' || run.command === 'FILL_ME') {
     console.log('fill in scene/command in run.json before the run starts — check will fail otherwise')

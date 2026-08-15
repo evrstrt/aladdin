@@ -12,13 +12,17 @@ experiments/
   exp-NNNN-<slug>/
     experiment.md             the question, status, current conclusion (mutable)
     runs/run-NNN/             immutable evidence: run.json, metrics.json, evidence/, artifacts.json
+                              plus status.json — the ONE mutable file, updated via `aladdin mark`
     verdicts/v-<stamp>.md     append-only judgments on runs
 ```
 
 ## Rules — non-negotiable
 
-1. **Never edit or delete anything under `runs/`.** A bad run stays; a verdict explains
-   why it is disregarded. Use `aladdin run <exp-id>` to create runs.
+1. **Never edit or delete anything under `runs/`** — except `status.json`, which is
+   updated only through `aladdin mark <exp-id> <run-id> running|succeeded|failed`.
+   A bad run stays; a verdict explains why it is disregarded. Use
+   `aladdin run <exp-id>` to create runs, and keep `mark` current so
+   `aladdin status` reflects reality.
 2. **Never delete or rewrite a verdict.** To change a judgment, write a new verdict with
    `supersedes: <old-id>` and mark the old one `status: superseded`. Use
    `aladdin verdict <exp-id>` to create verdicts.
@@ -36,6 +40,13 @@ experiments/
 8. **Conclusions live in `experiment.md`** — update `conclusion`, `confidence`, `scenes`
    as understanding improves. This is the file future sessions read first.
 9. **Run `aladdin check` before ending a session.** Fix errors; do not leave the tree broken.
+
+## Proposing tests
+
+Ideas worth testing but not started yet go in the queue: `aladdin propose <slug>
+<question> --priority high|medium|low`. When picking up work, take from the queue
+(`aladdin status` shows it, priority-sorted) and set the experiment's status to
+`open`. Propose freely — a written proposal that never runs beats a lost idea.
 
 ## Before starting new work
 
