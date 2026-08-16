@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { invoke } from '@tauri-apps/api/core'
+import { open } from '@tauri-apps/plugin-dialog'
 import { marked } from 'marked'
 
 const STATUS_LABEL = {
@@ -260,6 +261,17 @@ export default function App() {
   const onReview = (file, action) =>
     invoke('review_verdict', { file, action }).then(refresh).catch((e) => setError(String(e)))
 
+  const addProject = async () => {
+    const dir = await open({ directory: true, multiple: false, title: 'Choose a project folder' })
+    if (!dir) return
+    try {
+      await invoke('add_project', { path: dir })
+      await refresh()
+    } catch (e) {
+      setError(String(e))
+    }
+  }
+
   const current = useMemo(() => {
     if (!state || sel.type !== 'exp') return null
     for (const project of state.projects)
@@ -307,12 +319,12 @@ export default function App() {
             </div>
           ))}
           {state.projects.length === 0 && (
-            <div className="pad muted small">
-              No projects yet. Register one:
-              <pre>aladdin repos add ~/path/to/repo</pre>
-            </div>
+            <div className="pad muted small">No projects yet — add a folder below.</div>
           )}
         </div>
+        <button className="add-project" onClick={addProject}>
+          + Add project
+        </button>
       </aside>
       <main className="main">
         {error && <div className="error-bar">{error}</div>}

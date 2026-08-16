@@ -10,10 +10,11 @@ const claudeMdSection = `
 
 This repo tracks experiments under \`experiments/\`. Before any experiment, test run,
 or pipeline-evaluation work, read \`experiments/README.md\` and follow its rules.
-Record every run with \`aladdin run\`, every judgment with \`aladdin verdict\`; keep run
-state current with \`aladdin mark\`; queue test ideas with \`aladdin propose\`; run
-\`aladdin check\` before ending a session. Never edit anything under \`runs/\` except
-via \`aladdin mark\`; never delete or rewrite a verdict — supersede it.
+Use the aladdin MCP tools: query_experiments before starting; record_run, mark_run,
+submit_verdict, conclude_experiment while working; check_tree before ending the
+session. If the aladdin MCP server is not available, say so and stop recording —
+do not hand-write experiment files. Never edit anything under runs/ except via
+mark_run; never delete or rewrite a verdict — supersede it.
 `
 
 export function init(args) {

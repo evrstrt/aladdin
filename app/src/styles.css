@@ -340,3 +340,18 @@ h2 {
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
+
+.add-project {
+  margin: 8px 12px 14px;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--muted);
+  background: none;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.add-project:hover { color: var(--lamp); border-color: rgba(232, 163, 61, 0.4); }

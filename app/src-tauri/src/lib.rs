@@ -3,6 +3,9 @@ use serde_json::{json, Value};
 use std::fs;
 use std::path::{Path, PathBuf};
 
+const CONTRACT_README: &str = include_str!("../../../templates/EXPERIMENTS-README.md");
+const CLAUDE_SECTION: &str = "\n## experiments \u{2014} aladdin\n\nThis repo tracks experiments under `experiments/`. Before any experiment, test run,\nor pipeline-evaluation work, read `experiments/README.md` and follow its rules.\nUse the aladdin MCP tools: query_experiments before starting; record_run, mark_run,\nsubmit_verdict, conclude_experiment while working; check_tree before ending the\nsession. If the aladdin MCP server is not available, say so and stop recording \u{2014}\ndo not hand-write experiment files. Never edit anything under runs/ except via\nmark_run; never delete or rewrite a verdict \u{2014} supersede it.\n";
+
 fn home() -> PathBuf {
     PathBuf::from(std::env::var("HOME").unwrap_or_default())
 }
@@ -216,9 +219,56 @@ fn review_verdict(file: String, action: String) -> Result<Value, String> {
     serde_json::to_value(&data).map_err(|e| e.to_string())
 }
 
+
+#[tauri::command]
+fn add_project(path: String) -> Result<Value, String> {
+    let dir = PathBuf::from(&path);
+    if !dir.is_dir() {
+        return Err("not a folder".into());
+    }
+    let root = dir.join("experiments");
+    let mut created = false;
+    if !root.is_dir() {
+        fs::create_dir_all(root.join("scoring")).map_err(|e| e.to_string())?;
+        fs::write(root.join("README.md"), CONTRACT_README).map_err(|e| e.to_string())?;
+        fs::write(
+            root.join("INDEX.md"),
+            "# experiments\n\n(no experiments yet)\n",
+        )
+        .map_err(|e| e.to_string())?;
+        created = true;
+    }
+    let claude_md = dir.join("CLAUDE.md");
+    if claude_md.exists() {
+        let text = fs::read_to_string(&claude_md).map_err(|e| e.to_string())?;
+        if !text.contains("aladdin") {
+            fs::write(&claude_md, format!("{text}{CLAUDE_SECTION}")).map_err(|e| e.to_string())?;
+        }
+    } else {
+        fs::write(&claude_md, format!("# CLAUDE.md\n{CLAUDE_SECTION}")).map_err(|e| e.to_string())?;
+    }
+    let cfg_dir = home().join(".aladdin");
+    fs::create_dir_all(&cfg_dir).map_err(|e| e.to_string())?;
+    let mut repos: Vec<String> = load_repos()
+        .iter()
+        .map(|p| p.to_string_lossy().into_owned())
+        .collect();
+    let abs = dir.to_string_lossy().into_owned();
+    if !repos.contains(&abs) {
+        repos.push(abs.clone());
+    }
+    fs::write(
+        cfg_dir.join("repos.json"),
+        serde_json::to_string_pretty(&json!({ "repos": repos })).map_err(|e| e.to_string())? + "\n",
+    )
+    .map_err(|e| e.to_string())?;
+    Ok(json!({ "path": abs, "scaffolded": created }))
+}
+
 pub fn run() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_state, read_evidence, review_verdict])
+        .plugin(tauri_plugin_dialog::init())
+        .invoke_handler(tauri::generate_handler![get_state, read_evidence, review_verdict, add_project])
         .run(tauri::generate_context!())
         .expect("error while running aladdin");
 }
