@@ -46,12 +46,20 @@ aladdin index                          # regenerate INDEX.md
 The full agent contract is in `templates/EXPERIMENTS-README.md`, installed into each
 repo by `init`.
 
+## Mac app
+
+`app/` is a Tauri app: review queue, projects sidebar, experiment pages with
+evidence inline. Build with `npx tauri build` in `app/`; it reads the repo
+registry (`aladdin repos`).
+
+## MCP server
+
+`aladdin mcp` runs a stdio MCP server exposing query_experiments, get_experiment,
+create_experiment, record_run, mark_run, submit_verdict, conclude_experiment, and
+check_tree — schema-validated writes for Claude sessions. Register once with
+`claude mcp add -s user aladdin -- aladdin mcp`.
+
 ## Roadmap
 
-- Review app: local web UI — cross-repo review queue for unreviewed verdicts,
-  evidence galleries, run comparison. SQLite index as a rebuildable cache, files
-  stay the source of truth.
-- MCP server: `query_experiments`, `record_run`, `submit_verdict` for any Claude
-  session, schema-enforced at write time.
 - Launch integration: `aladdin run --exec` wrapping ssh to rig / RunPod pod spin-up,
   so recording a run and starting it are the same action.

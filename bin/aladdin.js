@@ -25,17 +25,22 @@ usage:
                                      update run lifecycle (queued|running|succeeded|failed|aborted)
   aladdin verdict <exp-id> [opts]    create an unreviewed verdict
   aladdin status [dir]               dashboard: queue, active runs, pending review\n  aladdin repos [add|rm] [dir]       manage the repo registry the Mac app reads
+  aladdin mcp                        run the MCP server (stdio) for Claude sessions
   aladdin check [dir]                validate the whole tree
   aladdin index [dir]                regenerate INDEX.md`
 
-if (!cmd || !commands[cmd]) {
+if (cmd === 'mcp') {
+  const { runMcp } = await import('../src/mcp.js')
+  await runMcp()
+} else if (!cmd || !commands[cmd]) {
   console.log(usage)
   process.exit(cmd ? 1 : 0)
-}
+} else {
 
-try {
-  commands[cmd](args)
-} catch (e) {
-  console.error(`error: ${e.message}`)
-  process.exit(1)
+  try {
+    commands[cmd](args)
+  } catch (e) {
+    console.error(`error: ${e.message}`)
+    process.exit(1)
+  }
 }

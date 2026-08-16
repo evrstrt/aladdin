@@ -48,6 +48,13 @@ Ideas worth testing but not started yet go in the queue: `aladdin propose <slug>
 (`aladdin status` shows it, priority-sorted) and set the experiment's status to
 `open`. Propose freely — a written proposal that never runs beats a lost idea.
 
+## In Claude sessions
+
+If the `aladdin` MCP server is available, prefer its tools over raw file writes: they
+validate at write time. `query_experiments` before starting work; `record_run` /
+`mark_run` / `submit_verdict` / `conclude_experiment` while working; `check_tree`
+before ending. The CLI remains the fallback everywhere else (pods, scripts).
+
 ## Before starting new work
 
 Read `INDEX.md`, then the `experiment.md` of anything related to your task. Do not re-run
