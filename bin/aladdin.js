@@ -7,10 +7,11 @@ import { check } from '../src/commands/check.js'
 import { index } from '../src/commands/index-cmd.js'
 import { mark } from '../src/commands/mark.js'
 import { status } from '../src/commands/status.js'
+import { repos } from '../src/commands/repos.js'
 
 const [cmd, ...args] = process.argv.slice(2)
 
-const commands = { init, new: newExperiment, propose, run: newRun, mark, verdict: newVerdict, check, index, status }
+const commands = { init, new: newExperiment, propose, run: newRun, mark, verdict: newVerdict, check, index, status, repos }
 
 const usage = `aladdin — experiment tracking for agent-driven pipelines
 
@@ -23,7 +24,7 @@ usage:
   aladdin mark <exp-id> <run-id> <state>
                                      update run lifecycle (queued|running|succeeded|failed|aborted)
   aladdin verdict <exp-id> [opts]    create an unreviewed verdict
-  aladdin status [dir]               dashboard: queue, active runs, pending review
+  aladdin status [dir]               dashboard: queue, active runs, pending review\n  aladdin repos [add|rm] [dir]       manage the repo registry the Mac app reads
   aladdin check [dir]                validate the whole tree
   aladdin index [dir]                regenerate INDEX.md`
 

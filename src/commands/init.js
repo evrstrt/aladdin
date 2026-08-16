@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, copyFileSync, writeFileSync, readFileSync, appendFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
+import { registerRepo } from '../config.js'
 
 const templateDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', 'templates')
 
@@ -26,6 +27,8 @@ export function init(args) {
   copyFileSync(path.join(templateDir, 'EXPERIMENTS-README.md'), path.join(dir, 'README.md'))
   writeFileSync(path.join(dir, 'INDEX.md'), '# experiments\n\n(no experiments yet — run `aladdin new <slug> <question>`)\n')
   console.log(`initialized ${dir}`)
+
+  if (registerRepo(target)) console.log('registered in ~/.aladdin/repos.json (used by the app and `aladdin repos`)')
 
   const claudeMd = path.join(target, 'CLAUDE.md')
   if (!existsSync(claudeMd)) {
